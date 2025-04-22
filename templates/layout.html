@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FakeNews Detector</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind with a dark theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-truncate-multi {
+                display: -webkit-box;
+                -webkit-line-clamp: 5;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-900 text-gray-100 flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex items-center">
+                        <i class="fas fa-newspaper text-indigo-500 text-xl mr-2"></i>
+                        <span class="font-semibold text-xl text-white">FakeNews Detector</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex md:items-center">
+                    <a href="{{ url_for('index') }}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium {{ 'bg-gray-700 text-white' if request.path == '/' else 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                        <i class="fas fa-search mr-1"></i> Detect
+                    </a>
+                    <a href="{{ url_for('history') }}" 
+                       class="ml-4 px-3 py-2 rounded-md text-sm font-medium {{ 'bg-gray-700 text-white' if request.path == '/history' else 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                        <i class="fas fa-history mr-1"></i> History
+                    </a>
+                    <a href="{{ url_for('about') }}" 
+                       class="ml-4 px-3 py-2 rounded-md text-sm font-medium {{ 'bg-gray-700 text-white' if request.path == '/about' else 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                        <i class="fas fa-info-circle mr-1"></i> About
+                    </a>
+                </div>
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-button" type="button" class="text-gray-400 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu, hidden by default -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{{ url_for('index') }}" 
+                   class="block px-3 py-2 rounded-md text-base font-medium {{ 'bg-gray-700 text-white' if request.path == '/' else 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                    <i class="fas fa-search mr-1"></i> Detect
+                </a>
+                <a href="{{ url_for('history') }}" 
+                   class="block px-3 py-2 rounded-md text-base font-medium {{ 'bg-gray-700 text-white' if request.path == '/history' else 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                    <i class="fas fa-history mr-1"></i> History
+                </a>
+                <a href="{{ url_for('about') }}" 
+                   class="block px-3 py-2 rounded-md text-base font-medium {{ 'bg-gray-700 text-white' if request.path == '/about' else 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
+                    <i class="fas fa-info-circle mr-1"></i> About
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% set alert_color = 'red' if category == 'danger' else ('green' if category == 'success' else ('blue' if category == 'info' else 'yellow')) %}
+                    <div id="alert-{{ loop.index }}" class="mb-4 flex p-4 {{ 'bg-' + alert_color + '-100 text-' + alert_color + '-700' }} rounded-lg" role="alert">
+                        <div class="ml-3 text-sm font-medium">
+                            {{ message }}
+                        </div>
+                        <button type="button" class="ml-auto -mx-1.5 -my-1.5 hover:bg-{{ alert_color }}-200 rounded-lg focus:ring-2 focus:ring-{{ alert_color }}-400 p-1.5 inline-flex h-8 w-8" 
+                                onclick="document.getElementById('alert-{{ loop.index }}').style.display = 'none'">
+                            <i class="fas fa-times"></i>
+                            <span class="sr-only">Close</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h5 class="text-lg font-semibold text-white mb-2">FakeNews Detector</h5>
+                    <p class="text-gray-400">
+                        An AI-powered tool to help identify potentially false information.
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0 text-gray-400">
+                    <p>
+                        <small>&copy; 2025 FakeNews Detector. All rights reserved.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

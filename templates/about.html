@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-gray-800 rounded-lg shadow-lg mb-8 overflow-hidden border border-gray-700">
+        <div class="bg-gray-700 px-6 py-4 border-b border-gray-600">
+            <h2 class="text-lg font-medium text-white flex items-center">
+                <i class="fas fa-info-circle mr-2 text-indigo-400"></i>About FakeNews Detector
+            </h2>
+        </div>
+        <div class="p-6 space-y-6 text-gray-300">
+            <div>
+                <h3 class="text-lg font-medium text-white mb-3">What is FakeNews Detector?</h3>
+                <p>
+                    FakeNews Detector is an AI-powered tool designed to help users identify potentially misleading or 
+                    false information in news content. Using natural language processing and machine learning 
+                    algorithms, our system analyzes the text and provides a reliability assessment.
+                </p>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-6">
+                <h3 class="text-lg font-medium text-white mb-3">How does it work?</h3>
+                <p class="mb-4">
+                    Our system uses a combination of techniques to analyze news content:
+                </p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><span class="font-semibold text-white">Text Analysis:</span> We examine the language patterns, word choice, and structure of the content.</li>
+                    <li><span class="font-semibold text-white">Linguistic Markers:</span> The system looks for common indicators of misinformation, such as sensationalist language, excessive punctuation, and hyperbolic claims.</li>
+                    <li><span class="font-semibold text-white">Machine Learning:</span> Our model has been trained on examples of both real and fake news to learn the subtle differences between them.</li>
+                </ul>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-6">
+                <h3 class="text-lg font-medium text-white mb-3">Important Disclaimers</h3>
+                <div class="bg-yellow-900/30 border border-yellow-800 text-yellow-100 rounded-lg p-4">
+                    <div class="flex">
+                        <i class="fas fa-exclamation-triangle mt-0.5 mr-2 text-yellow-400"></i>
+                        <div>
+                            <h4 class="font-semibold text-white">Limitations of Automated Detection</h4>
+                            <p>
+                                While our system is designed to help identify potentially misleading content, it is not infallible. 
+                                The tool provides an assessment based on patterns it has learned, but context, nuance, and evolving 
+                                language can affect accuracy. Always verify information through multiple reliable sources.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-6">
+                <h3 class="text-lg font-medium text-white mb-3">Tips for Identifying Fake News</h3>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li><span class="font-semibold text-white">Check the source:</span> Verify the credibility of the website or publication.</li>
+                    <li><span class="font-semibold text-white">Look for author information:</span> Credible news sources typically provide author details.</li>
+                    <li><span class="font-semibold text-white">Check the date:</span> Old news articles may be shared out of context.</li>
+                    <li><span class="font-semibold text-white">Read beyond the headline:</span> Headlines can be misleading even when the content is accurate.</li>
+                    <li><span class="font-semibold text-white">Check your biases:</span> Be aware that personal biases can affect how you interpret information.</li>
+                    <li><span class="font-semibold text-white">Consult fact-checking websites:</span> Sites like Snopes, FactCheck.org, and PolitiFact can help verify claims.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
