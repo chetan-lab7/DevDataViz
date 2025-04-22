@@ -83,6 +83,26 @@
                         </div>
                     {% endif %}
                 </div>
+                
+                {% if result.indicators and result.indicators|length > 0 %}
+                <div class="mt-6">
+                    <h3 class="text-sm font-medium text-gray-300 mb-2">Analysis Indicators:</h3>
+                    <div class="rounded-lg bg-gray-700 p-4 border border-gray-600">
+                        <ul class="text-gray-300 list-disc pl-6 space-y-1">
+                            {% for indicator in result.indicators %}
+                                <li>{{ indicator }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% if result.indicators|length == 0 %}
+                            <p class="text-gray-400">No suspicious patterns detected in this content.</p>
+                        {% endif %}
+                    </div>
+                    <p class="mt-2 text-xs text-gray-400">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        These indicators highlight patterns often found in misleading content. They are used alongside machine learning to determine reliability.
+                    </p>
+                </div>
+                {% endif %}
             </div>
         </div>
     {% endif %}

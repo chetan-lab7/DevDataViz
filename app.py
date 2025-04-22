@@ -45,8 +45,11 @@ def detect():
         # Generate a unique ID for this article
         article_id = str(uuid.uuid4())
         
-        # Detect if the news is fake
+        # Detect if the news is fake and get indicators
         prediction, confidence = detector.predict(news_content)
+        
+        # Get analysis indicators for educational purposes
+        indicators = detector._analyze_fake_patterns(news_content)
         
         # Store the result
         news_storage.add_article({
@@ -55,6 +58,7 @@ def detect():
             'full_content': news_content,
             'prediction': prediction,
             'confidence': confidence,
+            'indicators': indicators,
             'timestamp': news_storage.get_timestamp()
         })
         
@@ -63,7 +67,8 @@ def detect():
             'id': article_id,
             'content': news_content,
             'prediction': prediction,
-            'confidence': confidence
+            'confidence': confidence,
+            'indicators': indicators
         }
         
         return redirect(url_for('index', result='success'))
