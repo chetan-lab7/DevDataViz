@@ -1,0 +1,10 @@
+email-validator
+Flask
+flask-sqlalchemy
+gunicorn
+nltk
+numpy
+psycopg2-binary
+pymongo
+scikit-learn
+trafilatura
